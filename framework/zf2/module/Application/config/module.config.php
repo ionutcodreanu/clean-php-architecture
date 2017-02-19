@@ -7,6 +7,8 @@
 
 namespace Application;
 
+use Application\Controller\CustomersController;
+use Application\Persistence\CustomerTable;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -24,16 +26,16 @@ return [
                     ],
                 ],
             ],
-//            'customers' => [
-//                'type' => 'Segment',
-//                'options' => [
-//                    'route' => '/customers',
-//                    'defaults' => [
-//                        'controller' => 'Application\Controller\Customers',
-//                        'action' => 'index',
-//                    ],
-//                ],
-//            ],
+            'customers' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/customers',
+                    'defaults' => [
+                        'controller' => CustomersController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
 //            'orders' => [
 //                'type' => 'Segment',
 //                'options' => [
@@ -69,6 +71,11 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
+            CustomersController::class => function ($serviceManager) {
+                return new CustomersController(
+                    $serviceManager->getServiceLocator()->get(CustomerTable::class)
+                );
+            }
         ],
     ],
     'view_manager' => [
