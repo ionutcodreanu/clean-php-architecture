@@ -9,6 +9,9 @@ namespace Application;
 
 use Application\Controller\CustomersController;
 use Application\Persistence\CustomerTable;
+use Application\Service\InputFilter\CustomerInputFilter;
+use Interop\Container\ContainerInterface;
+use Zend\Hydrator\ClassMethods;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -34,7 +37,20 @@ return [
                         'controller' => CustomersController::class,
                         'action' => 'index',
                     ],
+
                 ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'create' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/new',
+                            'defaults' => [
+                                'action' => 'new',
+                            ],
+                        ]
+                    ],
+                ]
             ],
 //            'orders' => [
 //                'type' => 'Segment',
@@ -71,9 +87,11 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
-            CustomersController::class => function ($serviceManager) {
+            CustomersController::class => function (ContainerInterface $container, $requestedName) {
                 return new CustomersController(
-                    $serviceManager->getServiceLocator()->get(CustomerTable::class)
+                    $container->get(CustomerTable::class),
+                    new CustomerInputFilter(),
+                    new ClassMethods()
                 );
             }
         ],
@@ -93,5 +111,10 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
+            'validationErrors' => 'Application\View\Helper\ValidationErrors',
+        ]
     ],
 ];
