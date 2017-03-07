@@ -8,9 +8,16 @@
 namespace Application;
 
 use Application\Controller\CustomersController;
+use Application\Controller\OrdersController;
 use Application\Persistence\CustomerTable;
+use Application\Persistence\Hydrator\OrderHydrator;
+use Application\Persistence\OrderTable;
+use Application\Persistence\TableGateway\TableGatewayFactory;
 use Application\Service\InputFilter\CustomerInputFilter;
+use Application\Service\InputFilter\OrderInputFilter;
+use CleanPhp\Invoicer\Domain\Entity\Order;
 use Interop\Container\ContainerInterface;
+use Zend\Db\Adapter\Adapter;
 use Zend\Hydrator\ClassMethods;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
@@ -64,16 +71,16 @@ return [
                     ],
                 ]
             ],
-//            'orders' => [
-//                'type' => 'Segment',
-//                'options' => [
-//                    'route' => '/orders',
-//                    'defaults' => [
-//                        'controller' => 'Application\Controller\Orders',
-//                        'action' => 'index',
-//                    ],
-//                ],
-//            ],
+            'orders' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/orders[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => OrdersController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
 //            'invoices' => [
 //                'type' => 'Segment',
 //                'options' => [
@@ -105,7 +112,15 @@ return [
                     new CustomerInputFilter(),
                     new ClassMethods()
                 );
-            }
+            },
+            OrdersController::class => function (ContainerInterface $container, $requestedName) {
+                return new OrdersController(
+                    $container->get(OrderTable::class),
+                    $container->get(CustomerTable::class),
+                    new OrderInputFilter(),
+                    $container->get(OrderHydrator::class)
+                );
+            },
         ],
     ],
     'view_manager' => [

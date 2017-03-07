@@ -20,5 +20,4 @@ class CustomerInputFilter extends InputFilter
 
         $this->add($email);
     }
-
 }

@@ -12,17 +12,20 @@
  */
 
 use Application\Persistence\CustomerTable;
+use Application\Persistence\Hydrator\OrderHydrator;
 use Application\Persistence\InvoiceTable;
 use Application\Persistence\OrderTable;
 use Application\Persistence\TableGateway\TableGatewayFactory;
 use CleanPhp\Invoicer\Domain\Entity\Customer;
 use CleanPhp\Invoicer\Domain\Entity\Invoice;
 use CleanPhp\Invoicer\Domain\Entity\Order;
+use Interop\Container\ContainerInterface;
+use Zend\Db\Adapter\Adapter;
 use Zend\Hydrator\ClassMethods;
 
 return [
     'service_manager' => [
-        'factories' => [
+        'factories' => array(
             Zend\Db\Adapter\Adapter::class => Zend\Db\Adapter\AdapterServiceFactory::class,
             CustomerTable::class => function ($serviceManager) {
                 $factory = new TableGatewayFactory();
@@ -60,6 +63,23 @@ return [
                 );
                 return new OrderTable($ordersTableGateway, $hydrator);
             },
-        ]
+            OrderHydrator::class => function (ContainerInterface $container, $requestedName) {
+                return new OrderHydrator(
+                    new ClassMethods(),
+                    $container->get(CustomerTable::class)
+                );
+            },
+            OrderTable::class => function (ContainerInterface $container, $requestedName) {
+                $factory = new TableGatewayFactory();
+                $orderHydrator = $container->get(OrderHydrator::class);
+                $orderGateway = $factory->createGateway(
+                    $container->get(Adapter::class),
+                    $orderHydrator,
+                    new Order(),
+                    'orders'
+                );
+                return new OrderTable($orderGateway, $orderHydrator);
+            },
+        )
     ]
 ];
