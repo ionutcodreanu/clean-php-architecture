@@ -12,6 +12,7 @@
  */
 
 use Application\Persistence\CustomerTable;
+use Application\Persistence\Hydrator\InvoiceHydrator;
 use Application\Persistence\Hydrator\OrderHydrator;
 use Application\Persistence\InvoiceTable;
 use Application\Persistence\OrderTable;
@@ -79,6 +80,25 @@ return [
                     'orders'
                 );
                 return new OrderTable($orderGateway, $orderHydrator);
+            },
+            InvoiceHydrator::class => function (ContainerInterface $container, $requestedName) {
+                return new InvoiceHydrator(
+                    new ClassMethods(),
+                    $container->get(OrderTable::class)
+                );
+            },
+            InvoiceTable::class => function (ContainerInterface $container, $requestedName) {
+                $factory = new TableGatewayFactory();
+                $hydrator = $container->get(InvoiceHydrator::class);
+                return new InvoiceTable(
+                    $factory->createGateway(
+                        $container->get(Zend\Db\Adapter\Adapter::class),
+                        $hydrator,
+                        new Invoice(),
+                        'invoices'
+                    ),
+                    $hydrator
+                );
             },
         )
     ]

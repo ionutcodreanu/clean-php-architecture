@@ -8,9 +8,11 @@
 namespace Application;
 
 use Application\Controller\CustomersController;
+use Application\Controller\InvoicesController;
 use Application\Controller\OrdersController;
 use Application\Persistence\CustomerTable;
 use Application\Persistence\Hydrator\OrderHydrator;
+use Application\Persistence\InvoiceTable;
 use Application\Persistence\OrderTable;
 use Application\Persistence\TableGateway\TableGatewayFactory;
 use Application\Service\InputFilter\CustomerInputFilter;
@@ -81,16 +83,16 @@ return [
                     ],
                 ],
             ],
-//            'invoices' => [
-//                'type' => 'Segment',
-//                'options' => [
-//                    'route' => '/invoices',
-//                    'defaults' => [
-//                        'controller' => 'Application\Controller\Invoices',
-//                        'action' => 'index',
-//                    ],
-//                ],
-//            ],
+            'invoices' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/invoices[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Invoices',
+                        'action' => 'index',
+                    ],
+                ],
+            ],
             'application' => [
                 'type' => Segment::class,
                 'options' => [
@@ -121,6 +123,11 @@ return [
                     $container->get(OrderHydrator::class)
                 );
             },
+            InvoicesController::class => function (ContainerInterface $container, $requestedName) {
+                return new InvoicesController(
+                    $container->get(InvoiceTable::class)
+                );
+            }
         ],
     ],
     'view_manager' => [
