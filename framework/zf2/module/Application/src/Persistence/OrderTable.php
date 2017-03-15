@@ -8,6 +8,7 @@ class OrderTable extends AbstractDataTable implements OrderRepositoryInterface
 {
     public function getUninvoicedOrders()
     {
-        // TODO: Implement getUninvoicedOrders() method.
+        //ugly code, add a flag to orders when are invoiced, is not scalable
+        return $this->gateway->select('id NOT IN(SELECT order_id from invoices)');
     }
 }

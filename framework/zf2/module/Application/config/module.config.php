@@ -18,6 +18,8 @@ use Application\Persistence\TableGateway\TableGatewayFactory;
 use Application\Service\InputFilter\CustomerInputFilter;
 use Application\Service\InputFilter\OrderInputFilter;
 use CleanPhp\Invoicer\Domain\Entity\Order;
+use CleanPhp\Invoicer\Domain\Factory\InvoiceFactory;
+use CleanPhp\Invoicer\Domain\Service\InvoicingService;
 use Interop\Container\ContainerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Hydrator\ClassMethods;
@@ -88,7 +90,7 @@ return [
                 'options' => [
                     'route' => '/invoices[/:action[/:id]]',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Invoices',
+                        'controller' => InvoicesController::class,
                         'action' => 'index',
                     ],
                 ],
@@ -125,7 +127,12 @@ return [
             },
             InvoicesController::class => function (ContainerInterface $container, $requestedName) {
                 return new InvoicesController(
-                    $container->get(InvoiceTable::class)
+                    $container->get(InvoiceTable::class),
+                    $container->get(OrderTable::class),
+                    new InvoicingService(
+                        $container->get(OrderTable::class),
+                        new InvoiceFactory()
+                    )
                 );
             }
         ],

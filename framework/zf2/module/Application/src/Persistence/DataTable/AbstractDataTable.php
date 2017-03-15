@@ -12,11 +12,11 @@ class AbstractDataTable implements RepositoryInterface
     /**
      * @var TableGateway
      */
-    private $gateway;
+    protected $gateway;
     /**
      * @var HydratorInterface
      */
-    private $hydrator;
+    protected $hydrator;
 
     /**
      * AbstractDataTable constructor.
