@@ -8,6 +8,10 @@ interface RepositoryInterface
 {
     public function getById($entityId);
 
+    /**
+     * @param AbstractEntity $entity
+     * @return $this
+     */
     public function persist(AbstractEntity $entity);
 
     public function delete(AbstractEntity $entity);

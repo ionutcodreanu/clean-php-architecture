@@ -13,7 +13,9 @@
     "require": {
         "zendframework/zendframework": "^3.0",
         "zendframework/zend-mvc-plugin-flashmessenger": "^1.0",
-        "vnn/keyper": "^1.3"
+        "vnn/keyper": "^1.3",
+        "doctrine/orm": "^2.5",
+        "symfony/yaml": "^3.2"
     },
     "autoload": {
         "psr-4": {

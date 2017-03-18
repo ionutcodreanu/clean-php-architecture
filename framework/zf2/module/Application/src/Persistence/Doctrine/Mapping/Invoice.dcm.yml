@@ -1,0 +1,20 @@
+CleanPhp\Invoicer\Domain\Entity\Order:
+  type: entity
+  table: invoices
+  id:
+    id:
+      type: bigint
+      generator:
+        strategy: IDENTITY
+  fileds:
+    invoiceDate:
+      column: invoice_date
+      type: date
+    total:
+      type: decimal
+      precision: 10
+      scale: 2
+  manyToOne:
+    customer:
+      targetEntity: CleanPhp\Invoicer\Domain\Entity\Order
+      inversedBy: invoices
