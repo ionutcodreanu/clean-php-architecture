@@ -12,6 +12,10 @@
  */
 
 use Application\Persistence\CustomerTable;
+use Application\Persistence\Doctrine\Repository\CustomerRepository;
+use Application\Persistence\Doctrine\Repository\InvoiceRepository;
+use Application\Persistence\Doctrine\Repository\OrderRepository;
+use Application\Persistence\Doctrine\Repository\RepositoryFactory;
 use Application\Persistence\Hydrator\InvoiceHydrator;
 use Application\Persistence\Hydrator\OrderHydrator;
 use Application\Persistence\InvoiceTable;
@@ -100,6 +104,9 @@ return [
                     $hydrator
                 );
             },
+            CustomerRepository::class => RepositoryFactory::class,
+            OrderRepository::class => RepositoryFactory::class,
+            InvoiceRepository::class => RepositoryFactory::class,
         )
     ]
 ];

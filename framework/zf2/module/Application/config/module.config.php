@@ -11,6 +11,9 @@ use Application\Controller\CustomersController;
 use Application\Controller\InvoicesController;
 use Application\Controller\OrdersController;
 use Application\Persistence\CustomerTable;
+use Application\Persistence\Doctrine\Repository\CustomerRepository;
+use Application\Persistence\Doctrine\Repository\InvoiceRepository;
+use Application\Persistence\Doctrine\Repository\OrderRepository;
 use Application\Persistence\Hydrator\OrderHydrator;
 use Application\Persistence\InvoiceTable;
 use Application\Persistence\OrderTable;
@@ -112,25 +115,25 @@ return [
             Controller\IndexController::class => InvokableFactory::class,
             CustomersController::class => function (ContainerInterface $container, $requestedName) {
                 return new CustomersController(
-                    $container->get(CustomerTable::class),
+                    $container->get(OrderRepository::class),
                     new CustomerInputFilter(),
                     new ClassMethods()
                 );
             },
             OrdersController::class => function (ContainerInterface $container, $requestedName) {
                 return new OrdersController(
-                    $container->get(OrderTable::class),
-                    $container->get(CustomerTable::class),
+                    $container->get(OrderRepository::class),
+                    $container->get(CustomerRepository::class),
                     new OrderInputFilter(),
                     $container->get(OrderHydrator::class)
                 );
             },
             InvoicesController::class => function (ContainerInterface $container, $requestedName) {
                 return new InvoicesController(
-                    $container->get(InvoiceTable::class),
-                    $container->get(OrderTable::class),
+                    $container->get(InvoiceRepository::class),
+                    $container->get(OrderRepository::class),
                     new InvoicingService(
-                        $container->get(OrderTable::class),
+                        $container->get(OrderRepository::class),
                         new InvoiceFactory()
                     )
                 );
