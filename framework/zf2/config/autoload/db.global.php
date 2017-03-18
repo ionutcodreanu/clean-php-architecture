@@ -7,7 +7,7 @@ return [
                 'cache' => 'array',
                 'paths' => [
                     realpath(__DIR__ . '/../../../../src/Domain/Entity'),
-                    realpath(__DIR__ . '/../../src/Persistence/Doctrine/Mapping')
+                    realpath(__DIR__ . '/../../module/Application/src/Persistence/Doctrine/Mapping')
                 ],
             ],
             'orm_default' => [

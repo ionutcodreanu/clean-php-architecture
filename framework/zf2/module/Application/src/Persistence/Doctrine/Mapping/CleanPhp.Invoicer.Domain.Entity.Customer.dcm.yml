@@ -6,7 +6,7 @@ CleanPhp\Invoicer\Domain\Entity\Customer:
       type: bigint
       generator:
         strategy: IDENTITY
-  fileds:
+  fields:
     name:
       length: 100
     email:

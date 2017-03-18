@@ -53,12 +53,15 @@ class OrderHydrator implements HydratorInterface
         return $order;
     }
 
-    public function extract($object) {
+    public function extract($object)
+    {
         $data = $this->wrappedHydrator->extract($object);
         if (array_key_exists('customer', $data) &&
-            !empty($data['customer'])) {
+            !empty($data['customer'])
+        ) {
             $data['customer_id'] = $data['customer']->getId();
             unset($data['customer']);
         }
         return $data;
-    }}
+    }
+}

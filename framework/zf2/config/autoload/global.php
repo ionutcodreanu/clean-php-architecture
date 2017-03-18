@@ -71,7 +71,7 @@ return [
             OrderHydrator::class => function (ContainerInterface $container, $requestedName) {
                 return new OrderHydrator(
                     new ClassMethods(),
-                    $container->get(CustomerTable::class)
+                    $container->get(CustomerRepository::class)
                 );
             },
             OrderTable::class => function (ContainerInterface $container, $requestedName) {

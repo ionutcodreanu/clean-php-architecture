@@ -115,7 +115,7 @@ return [
             Controller\IndexController::class => InvokableFactory::class,
             CustomersController::class => function (ContainerInterface $container, $requestedName) {
                 return new CustomersController(
-                    $container->get(OrderRepository::class),
+                    $container->get(CustomerRepository::class),
                     new CustomerInputFilter(),
                     new ClassMethods()
                 );

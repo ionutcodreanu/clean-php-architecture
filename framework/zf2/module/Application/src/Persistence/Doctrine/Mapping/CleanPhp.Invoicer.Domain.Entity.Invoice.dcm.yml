@@ -1,4 +1,4 @@
-CleanPhp\Invoicer\Domain\Entity\Order:
+CleanPhp\Invoicer\Domain\Entity\Invoice:
   type: entity
   table: invoices
   id:
@@ -6,7 +6,7 @@ CleanPhp\Invoicer\Domain\Entity\Order:
       type: bigint
       generator:
         strategy: IDENTITY
-  fileds:
+  fields:
     invoiceDate:
       column: invoice_date
       type: date
@@ -15,6 +15,6 @@ CleanPhp\Invoicer\Domain\Entity\Order:
       precision: 10
       scale: 2
   manyToOne:
-    customer:
+    order:
       targetEntity: CleanPhp\Invoicer\Domain\Entity\Order
       inversedBy: invoices

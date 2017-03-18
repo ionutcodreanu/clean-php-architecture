@@ -6,7 +6,7 @@ CleanPhp\Invoicer\Domain\Entity\Order:
       type: bigint
       generator:
         strategy: IDENTITY
-  fileds:
+  fields:
     orderNumber:
       column: order_number
       length: 100

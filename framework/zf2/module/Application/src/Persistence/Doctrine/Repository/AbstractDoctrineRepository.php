@@ -31,16 +31,15 @@ class AbstractDoctrineRepository implements RepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-
     public function getById($entityId)
     {
-        $this->entityManager->find($this->entityClass, $entityId);
+        return $this->entityManager->find($this->entityClass, $entityId);
     }
 
     public function persist(AbstractEntity $entity)
     {
         $this->entityManager->persist($entity);
-        $this->entityManager->flush();
+        $this->entityManager->flush($entity);
         return $this;
     }
 
@@ -52,6 +51,6 @@ class AbstractDoctrineRepository implements RepositoryInterface
 
     public function getAll()
     {
-        $this->entityManager->getRepository($this->entityClass)->findAll();
+        return $this->entityManager->getRepository($this->entityClass)->findAll();
     }
 }
